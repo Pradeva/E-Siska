@@ -1,23 +1,37 @@
 import 'package:flutter/material.dart';
 import 'package:tubesabp/pengumuman.dart';
-import 'package:tubesabp/profile.dart';
+import 'package:tubesabp/Announcement_Data.dart';
 import 'griddashboard.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 void main() => runApp(MaterialApp(
-  home: Home(),
-  debugShowCheckedModeBanner: false,
-));
+      home: Home(),
+      debugShowCheckedModeBanner: false,
+    ));
 
 class Home extends StatefulWidget {
   @override
   HomeState createState() => new HomeState();
 }
 
+Future<List<Announcement_Data>> fetchAnnouncement() async {
+  final res =
+      await http.get(Uri.parse('http://192.168.43.118:8000/api/announcement'));
+  if (res.statusCode == 200) {
+    var data = jsonDecode(res.body);
+    var parsed = data['list'].cast<Map<String, dynamic>>();
+    return parsed
+        .map<Announcement_Data>((json) => Announcement_Data.fromJson(json))
+        .toList();
+  } else {
+    throw Exception('Failed');
+  }
+}
+
 class HomeState extends State<Home> {
   void handlePengumumanTap() {
-      Navigator.push(context, MaterialPageRoute(
-          builder: (context) => const Announcement()));
-
+    // Perform actions when the "Pengumuman" container is tapped
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text('Pengumuman'), duration: Duration(seconds: 1)),
     );
@@ -25,8 +39,6 @@ class HomeState extends State<Home> {
 
   void handleUserButtonTap() {
     // Perform actions when the user button is tapped
-    Navigator.push(context, MaterialPageRoute(
-        builder: (context) => const Profile()));
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text('Profil'), duration: Duration(seconds: 1)),
     );
@@ -66,7 +78,7 @@ class HomeState extends State<Home> {
                               "Selamat datang,",
                               style: TextStyle(
                                 color: Colors.white,
-                                fontSize: 15,
+                                fontSize: 10,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
@@ -99,35 +111,52 @@ class HomeState extends State<Home> {
                   ),
                   GestureDetector(
                     onTap: handlePengumumanTap,
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      height: 200,
-                      width: 350,
-                      padding: EdgeInsets.all(16.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Text(
-                            "Pengumuman",
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
+                    child: FutureBuilder(
+                      future: fetchAnnouncement(),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return CircularProgressIndicator();
+                        } else if (snapshot.hasError) {
+                          return Text('Error: ${snapshot.error}');
+                        } else {
+                          final judul =
+                              snapshot.data![snapshot.data!.length - 1].judul;
+                          final pesan =
+                              snapshot.data![snapshot.data!.length - 1].pesan;
+
+                          return Container(
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(20),
                             ),
-                          ),
-                          SizedBox(height: 8),
-                          Text(
-                            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis eu mi nec turpis convallis dignissim at id massa.",
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 14,
+                            height: 200,
+                            width: 350,
+                            padding: EdgeInsets.all(16.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Text(
+                                  judul,
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                SizedBox(height: 8),
+                                Text(
+                                  pesan,
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 14,
+                                  ),
+                                ),
+                              ],
                             ),
-                          ),
-                        ],
-                      ),
+                          );
+                        }
+                      },
                     ),
                   ),
                 ],

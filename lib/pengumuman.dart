@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:flutter/cupertino.dart';
 
-
 void main() {
   runApp(const Announcement());
 }
@@ -16,15 +15,6 @@ class Announcement extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
         primarySwatch: Colors.blue,
       ),
       home: const MyHomePage(title: 'Flutter Demo Home Page'),
@@ -34,16 +24,6 @@ class Announcement extends StatelessWidget {
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
   final String title;
 
   @override
@@ -69,7 +49,6 @@ class _MyHomePageState extends State<MyHomePage> {
     {"nama": "Pengumuman", "Hp": "Pemberitahuan"}
   ];
 
-
   @override
   Widget build(BuildContext context) {
     // This method is rerun every time setState is called, for instance as done
@@ -87,17 +66,18 @@ class _MyHomePageState extends State<MyHomePage> {
           child: Column(
             children: [
               Container(
-                child: Text("Pengumuman", style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w600,
-                    fontFamily: "Poppins",
-                    color: Colors.white
-                )),
+                child: Text("Pengumuman",
+                    style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w600,
+                        fontFamily: "Poppins",
+                        color: Colors.white)),
                 margin: EdgeInsets.only(
-                  left:178,
+                  left: 178,
                   top: 35,
                 ),
               ),
+              // Disini
               Container(
                 height: 643,
                 width: 339,
@@ -109,63 +89,51 @@ class _MyHomePageState extends State<MyHomePage> {
                         color: Colors.grey.withOpacity(0.5),
                         spreadRadius: 5,
                         blurRadius: 5,
-                        offset: Offset(0, 3), // changes the position of the shadow
+                        offset:
+                            Offset(0, 3), // changes the position of the shadow
                       ),
-                    ]
-                ),
-                margin: EdgeInsets.only(
-                    top: 40
-                ),
-
+                    ]),
+                margin: EdgeInsets.only(top: 40),
                 child: ListView.builder(
                     itemCount: data.length,
-                    itemBuilder: (Context, index){
+                    itemBuilder: (Context, index) {
                       return GestureDetector(
-                          child : Padding(
-                            padding: EdgeInsets.all(17.0),
-                            child: Container(
-                              width: 322,
-                              height: 141,
-                              decoration: BoxDecoration(
-                                  color: Color.fromRGBO(255, 255, 255, 1),
-                                  borderRadius: BorderRadius.circular(30)
-                              ),
-                              child: Column(
-                                children: [
-                                  Container(
-                                    child: Text(data[index]["nama"]!,style: TextStyle(
+                          child: Padding(
+                        padding: EdgeInsets.all(17.0),
+                        child: Container(
+                          width: 322,
+                          height: 141,
+                          decoration: BoxDecoration(
+                              color: Color.fromRGBO(255, 255, 255, 1),
+                              borderRadius: BorderRadius.circular(30)),
+                          child: Column(
+                            children: [
+                              Container(
+                                child: Text(data[index]["nama"]!,
+                                    style: TextStyle(
                                         fontSize: 16,
                                         fontWeight: FontWeight.w500,
                                         color: Color.fromRGBO(79, 79, 79, 1),
-                                        fontFamily: "Quicksand"
-                                    )),
-                                    margin: EdgeInsets.only(
-                                        right: 170,
-                                        top: 20
-                                    ),
-                                  ),
-                                  Container(
-                                    child: Text(data[index]["Hp"]!,style: TextStyle(
+                                        fontFamily: "Quicksand")),
+                                margin: EdgeInsets.only(right: 170, top: 20),
+                              ),
+                              Container(
+                                child: Text(data[index]["Hp"]!,
+                                    style: TextStyle(
                                         fontSize: 20,
                                         fontWeight: FontWeight.w500,
                                         color: Color.fromRGBO(0, 0, 0, 1),
-                                        fontFamily: "Quicksand"
-                                    )),
-                                    margin: EdgeInsets.only(
-                                        right: 135,
-                                        top: 17
-                                    ),
-                                  ),
-                                ],
+                                        fontFamily: "Quicksand")),
+                                margin: EdgeInsets.only(right: 135, top: 17),
                               ),
-                              // child: ListTile(
-                              //   title: Text(data[index]["nama"]! + '\n' + data[index]["Hp"]!),
-                              // ),
-                            ),
-                          )
-                      );
-                    }
-                ),
+                            ],
+                          ),
+                          // child: ListTile(
+                          //   title: Text(data[index]["nama"]! + '\n' + data[index]["Hp"]!),
+                          // ),
+                        ),
+                      ));
+                    }),
               ),
             ],
           ),

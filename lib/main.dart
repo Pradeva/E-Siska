@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:flutter/cupertino.dart';
 
-
 void main() {
   runApp(const MyApp());
 }
@@ -69,7 +68,6 @@ class _MyHomePageState extends State<MyHomePage> {
     {"nama": "Pengumuman", "Hp": "Pemberitahuan"}
   ];
 
-
   @override
   Widget build(BuildContext context) {
     // This method is rerun every time setState is called, for instance as done
@@ -87,14 +85,14 @@ class _MyHomePageState extends State<MyHomePage> {
           child: Column(
             children: [
               Container(
-                child: Text("Pengumuman", style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w600,
-                    fontFamily: "Poppins",
-                    color: Colors.white
-                )),
+                child: Text("Pengumuman",
+                    style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w600,
+                        fontFamily: "Poppins",
+                        color: Colors.white)),
                 margin: EdgeInsets.only(
-                  left:178,
+                  left: 178,
                   top: 35,
                 ),
               ),
@@ -109,63 +107,51 @@ class _MyHomePageState extends State<MyHomePage> {
                         color: Colors.grey.withOpacity(0.5),
                         spreadRadius: 5,
                         blurRadius: 5,
-                        offset: Offset(0, 3), // changes the position of the shadow
+                        offset:
+                            Offset(0, 3), // changes the position of the shadow
                       ),
-                    ]
-                ),
-                margin: EdgeInsets.only(
-                    top: 40
-                ),
-
+                    ]),
+                margin: EdgeInsets.only(top: 40),
                 child: ListView.builder(
                     itemCount: data.length,
-                    itemBuilder: (Context, index){
+                    itemBuilder: (Context, index) {
                       return GestureDetector(
-                          child : Padding(
-                            padding: EdgeInsets.all(17.0),
-                            child: Container(
-                              width: 322,
-                              height: 141,
-                              decoration: BoxDecoration(
-                                  color: Color.fromRGBO(255, 255, 255, 1),
-                                  borderRadius: BorderRadius.circular(30)
-                              ),
-                              child: Column(
-                                children: [
-                                  Container(
-                                    child: Text(data[index]["nama"]!,style: TextStyle(
+                          child: Padding(
+                        padding: EdgeInsets.all(17.0),
+                        child: Container(
+                          width: 322,
+                          height: 141,
+                          decoration: BoxDecoration(
+                              color: Color.fromRGBO(255, 255, 255, 1),
+                              borderRadius: BorderRadius.circular(30)),
+                          child: Column(
+                            children: [
+                              Container(
+                                child: Text(data[index]["nama"]!,
+                                    style: TextStyle(
                                         fontSize: 16,
                                         fontWeight: FontWeight.w500,
                                         color: Color.fromRGBO(79, 79, 79, 1),
-                                        fontFamily: "Quicksand"
-                                    )),
-                                    margin: EdgeInsets.only(
-                                        right: 170,
-                                        top: 20
-                                    ),
-                                  ),
-                                  Container(
-                                    child: Text(data[index]["Hp"]!,style: TextStyle(
+                                        fontFamily: "Quicksand")),
+                                margin: EdgeInsets.only(right: 170, top: 20),
+                              ),
+                              Container(
+                                child: Text(data[index]["Hp"]!,
+                                    style: TextStyle(
                                         fontSize: 20,
                                         fontWeight: FontWeight.w500,
                                         color: Color.fromRGBO(0, 0, 0, 1),
-                                        fontFamily: "Quicksand"
-                                    )),
-                                    margin: EdgeInsets.only(
-                                        right: 135,
-                                        top: 17
-                                    ),
-                                  ),
-                                ],
+                                        fontFamily: "Quicksand")),
+                                margin: EdgeInsets.only(right: 135, top: 17),
                               ),
-                              // child: ListTile(
-                              //   title: Text(data[index]["nama"]! + '\n' + data[index]["Hp"]!),
-                              // ),
-                            ),
-                          )
-                      );
-                    }
-                ),
+                            ],
+                          ),
+                          // child: ListTile(
+                          //   title: Text(data[index]["nama"]! + '\n' + data[index]["Hp"]!),
+                          // ),
+                        ),
+                      ));
+                    }),
               ),
             ],
           ),

@@ -1,10 +1,17 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:tubesabp/beranda.dart';
+import 'package:http/http.dart' as http;
+import 'package:tubesabp/main.dart';
+import 'package:tubesabp/user.dart';
+import 'dart:async';
 
 void main() {
   runApp(const MyApp());
-}
 
+}
+String username='';
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
@@ -12,6 +19,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'login Page',
       theme: ThemeData(
         // This is the theme of your application.
@@ -27,6 +35,9 @@ class MyApp extends StatelessWidget {
         scaffoldBackgroundColor: Color(0xFF97BCE8),
       ),
       home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      routes: <String, WidgetBuilder>{
+        '/Home':(BuildContext context)=> new Home(username: username,),
+      },
     );
   }
 }
@@ -50,19 +61,34 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-  String _email = 'refky';
-  String _password = 'pass';
 
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
+  TextEditingController user = new TextEditingController();
+  TextEditingController pass = new TextEditingController();
+  String msg = '';
+
+  Future<List> _login() async{
+      final response = await http.post(Uri.parse('http://192.168.100.13:8000/api/login'), body: {
+        "email": user.text,
+        "password": pass.text,
+      });
+      var datauser = json.decode(response.body);
+
+      if(datauser['success']){
+        Navigator.pushReplacementNamed(context, '/Home');
+      } else {
+        setState(() {
+          msg = "Email / Password Salah";
+        });
+      }
+
+      setState(() {
+        username = datauser['success']['user']['name'];
+      });
+
+      print(username);
+
+      return datauser;
+
   }
 
   @override
@@ -86,19 +112,24 @@ class _MyHomePageState extends State<MyHomePage> {
             SizedBox(height: 50,),
             Text('SILAHKAN LOG IN', style: TextStyle(fontWeight: FontWeight.bold)),
             SizedBox(height: 20.0),
-            TextField(
+            TextFormField(
+              controller: user,
               style: new TextStyle(
                 fontFamily: 'Poppins',
               ),
               onChanged: (value) {
                 setState(() {
-                  _email = value;
                 });
               },
               decoration: InputDecoration(
                 filled: true,
                 fillColor: Colors.white,
                 labelText: 'Email',
+                hintText: 'Masukkan Email',
+                prefixIcon: const Icon(
+                  Icons.email_outlined,
+                  color: Colors.white,
+                ),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(18.0),
                   borderSide: BorderSide(color: Color(0xFF97BCE8)),
@@ -106,18 +137,22 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             ),
             SizedBox(height: 15.0),
-            TextField(
+            TextFormField(
+              controller: pass,
               style: new TextStyle(
                   fontFamily: 'Poppins'
               ),
               onChanged: (value) {
                 setState(() {
-                  _password = value;
                 });
               },
               obscureText: true,
               decoration: InputDecoration(
                 filled: true,
+                prefixIcon: const Icon(
+                  Icons.lock_outline,
+                  color: Colors.white,
+                ),
                 fillColor: Colors.white,
                 labelText: 'Password',
                 border: OutlineInputBorder(
@@ -127,7 +162,6 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             ),
             Container(
-
                 height: 50,
                 margin: EdgeInsets.all(20),
                 padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
@@ -143,12 +177,11 @@ class _MyHomePageState extends State<MyHomePage> {
                   ),
                   child: const Text('LOG IN'),
                   onPressed: (){
-                      Navigator.push(context, MaterialPageRoute(
-                          builder: (context) => Home()
-                      ));
-                  }
-                )
+                    _login();
+                  },
+                ),
             ),
+            Text(msg, style: TextStyle(fontSize: 30, color: Colors.red),)
           ],
         ),
       ),

@@ -4,11 +4,12 @@ import 'package:flutter/cupertino.dart';
 
 
 void main() {
-  runApp(const MyApp());
+  runApp(const MainPage());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class MainPage extends StatelessWidget {
+  const MainPage({super.key});
+
 
   // This widget is the root of your application.
   @override

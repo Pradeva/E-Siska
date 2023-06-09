@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:tubesabp/login.dart';
 import 'package:tubesabp/pengumuman.dart';
 import 'package:tubesabp/profile.dart';
 import 'griddashboard.dart';
 
 void main() => runApp(MaterialApp(
-  home: Home(),
+  home: Home(username: username,),
   debugShowCheckedModeBanner: false,
 ));
 
 class Home extends StatefulWidget {
+  Home({required this.username});
+  final String username;
+
   @override
   HomeState createState() => new HomeState();
 }
@@ -74,7 +78,7 @@ class HomeState extends State<Home> {
                               height: 4,
                             ),
                             Text(
-                              "Muhammad Reza",
+                              username,
                               style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 25,

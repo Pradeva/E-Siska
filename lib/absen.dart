@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+
 
 void main() {
   runApp(const Absen());
@@ -50,6 +52,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
+  dynamic currentTime = DateFormat.jm().format(DateTime.now());
 
   void _incrementCounter() {
     setState(() {
@@ -148,7 +151,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                     ),
                                     color: Color(0XFFAE2025),
                                   ),
-                                  child: Text("12:30",textAlign: TextAlign.center,style: TextStyle(
+                                  child: Text(currentTime,textAlign: TextAlign.center,style: TextStyle(
                                     color: Colors.white,
                                     fontFamily: "Poppins",
                                     fontSize: 70

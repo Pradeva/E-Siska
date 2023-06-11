@@ -26,18 +26,20 @@ class GridDashboard extends StatelessWidget {
         children: myList.map((data) {
           return GestureDetector(
             onTap: () {
-              if(data.title == "Lembur"){
-                Navigator.push(context, MaterialPageRoute(
-                    builder: (context) => const LemburForm()));
-              }else if(data.title =="Cuti"){
-                Navigator.push(context, MaterialPageRoute(
-                    builder: (context) => const CutiForm()));
-              }else if(data.title =="Absen"){
-                Navigator.push(context, MaterialPageRoute(
-                    builder: (context) => Absen()));
-              }else{
-                Navigator.push(context, MaterialPageRoute(
-                    builder: (context) => const listKaryawan()));
+              if (data.title == "Lembur") {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const LemburForm()));
+              } else if (data.title == "Cuti") {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => const CutiForm()));
+              } else if (data.title == "Absen") {
+                Navigator.push(
+                    context, MaterialPageRoute(builder: (context) => Absen()));
+              } else {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => const ListApp()));
               }
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(

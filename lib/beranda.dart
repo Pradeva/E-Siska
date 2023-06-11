@@ -1,22 +1,28 @@
 import 'package:flutter/material.dart';
+import 'package:tubesabp/login.dart';
 import 'package:tubesabp/pengumuman.dart';
 import 'package:tubesabp/profile.dart';
 import 'griddashboard.dart';
 
 void main() => runApp(MaterialApp(
-  home: Home(),
-  debugShowCheckedModeBanner: false,
-));
+      home: Home(
+        username: username,
+      ),
+      debugShowCheckedModeBanner: false,
+    ));
 
 class Home extends StatefulWidget {
+  Home({required this.username});
+  final String username;
+
   @override
   HomeState createState() => new HomeState();
 }
 
 class HomeState extends State<Home> {
   void handlePengumumanTap() {
-      Navigator.push(context, MaterialPageRoute(
-          builder: (context) => const Announcement()));
+    Navigator.push(
+        context, MaterialPageRoute(builder: (context) => const Announcement()));
 
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text('Pengumuman'), duration: Duration(seconds: 1)),
@@ -25,8 +31,8 @@ class HomeState extends State<Home> {
 
   void handleUserButtonTap() {
     // Perform actions when the user button is tapped
-    Navigator.push(context, MaterialPageRoute(
-        builder: (context) => const Profile()));
+    Navigator.push(
+        context, MaterialPageRoute(builder: (context) => const Profile()));
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text('Profil'), duration: Duration(seconds: 1)),
     );
@@ -74,7 +80,7 @@ class HomeState extends State<Home> {
                               height: 4,
                             ),
                             Text(
-                              "Muhammad Reza",
+                              username,
                               style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 25,

@@ -2,14 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:tubesabp/Karyawan_Data.dart';
+import 'package:tubesabp/login.dart';
+import 'package:tubesabp/Cuti_Data.dart';
 
 void main() {
-  runApp(const CutiForm());
+  runApp( CutiForm(username: username,));
+
 }
 
 Future<List<Karyawan_Data>> fetchKaryawan() async {
   final res =
-      await http.get(Uri.parse('http://192.168.43.118:8000/api/karyawan'));
+      await http.get(Uri.parse('http://192.168.43.22:8000/api/karyawan'));
   if (res.statusCode == 200) {
     var data = jsonDecode(res.body);
     var parsed = data['list'].cast<Map<String, dynamic>>();
@@ -22,8 +25,8 @@ Future<List<Karyawan_Data>> fetchKaryawan() async {
 }
 
 class CutiForm extends StatelessWidget {
-  const CutiForm({super.key});
-
+  const CutiForm({required this.username});
+  final Map<String, dynamic> username;
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -46,6 +49,22 @@ class Cuti extends StatefulWidget {
   State<Cuti> createState() => _CutiState();
 }
 
+Future<Map<String, dynamic>> addCuti(_tanggalCuti, _lamaCuti, _usersId) async {
+  final res = await http.post(
+    Uri.parse('http://192.168.43.22:8000/api/cuti'),
+    body: {
+      "users_id" : _usersId,
+      "lama_cuti" : _lamaCuti,
+      "tanggal_cuti" : _tanggalCuti
+    }
+  );
+  if (res.statusCode == 200) {
+    return jsonDecode(res.body);
+  }else{
+    throw Exception('Failed');
+  }
+}
+
 String getStatusText(int status) {
   if (status == 0) {
     return 'Belum di proses';
@@ -58,7 +77,7 @@ String getStatusText(int status) {
 
 class _CutiState extends State<Cuti> {
   DateTime? selectedDate;
-  TextEditingController lamaCutiController = TextEditingController();
+  var lamaCutiController = TextEditingController();
 
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
@@ -148,34 +167,51 @@ class _CutiState extends State<Cuti> {
                               child: FutureBuilder(
                                 future: fetchKaryawan(),
                                 builder: (context, snapshot) {
-                                  if (snapshot.connectionState ==
-                                      ConnectionState.waiting) {
-                                    return CircularProgressIndicator();
-                                  } else if (snapshot.hasError) {
+                                  // if (snapshot.connectionState ==
+                                  //     ConnectionState.waiting) {
+                                  //   return CircularProgressIndicator();
+                                  // }
+                                  if (snapshot.hasError) {
                                     return Text('Error: ${snapshot.error}');
                                   } else {
-                                    final nama = snapshot.data![0].name;
-                                    final cuti = snapshot.data![0].cuti;
+                                    var i = 0;
+                                    var cuti;
+                                    while (i < snapshot.data!.length){
+                                     if (snapshot.data![i].id == username['id']){
+                                       cuti = snapshot.data![i].cuti;
+                                     }
+                                     i++;
+                                    }
+                                    if (cuti != null){
+                                      return ListView.builder(
+                                        itemCount: cuti.length,
+                                        itemBuilder: (context, index) {
+                                          return Container(
+                                            width: 20,
+                                            child: Column(
+                                              children: [
+                                                SizedBox(height: 10,),
+                                                Container(width: 200,
+                                                  height: 50,
+                                                  decoration: BoxDecoration(
+                                                      color: Color(0xff97bce8),
+                                                      borderRadius:
+                                                      BorderRadius.circular(10)),
+                                                  child: Text(
+                                                    'Lama Cuti: ${cuti[index]["lama_cuti"]} hari\n'
+                                                        'Tanggal Cuti: ${cuti[index]["tanggal_cuti"]}\n'
+                                                        'Status: ${getStatusText(cuti[index]["disetujui"])}',
+                                                    textAlign: TextAlign.center,
+                                                  ),),
 
-                                    return ListView.builder(
-                                      itemCount: cuti.length,
-                                      itemBuilder: (context, index) {
-                                        return Container(
-                                          width: 100,
-                                          height: 50,
-                                          decoration: BoxDecoration(
-                                              color: Color(0xff97bce8),
-                                              borderRadius:
-                                                  BorderRadius.circular(10)),
-                                          child: Text(
-                                            'Lama Cuti: ${cuti[index]["lama_cuti"]} hari\n'
-                                            'Tanggal Cuti: ${cuti[index]["tanggal_cuti"]}\n'
-                                            'Status: ${getStatusText(cuti[index]["disetujui"])}',
-                                            textAlign: TextAlign.center,
-                                          ),
-                                        );
-                                      },
-                                    );
+                                              ],
+                                            ),
+                                          );
+                                        },
+                                      );
+                                    } else {
+                                      return Text("Belum Ada Cuti", textAlign: TextAlign.center);
+                                    }
                                   }
                                 },
                               ),
@@ -249,15 +285,25 @@ class _CutiState extends State<Cuti> {
                             SizedBox(height: 20.0),
                             Container(
                               child: ElevatedButton(
-                                onPressed: () {
+                                onPressed: () async {
+                                  var tanggalCuti;
+                                  var lamaCuti;
                                   if (selectedDate != null &&
                                       lamaCutiController.text.isNotEmpty) {
-                                    String tanggalCuti =
+                                    tanggalCuti =
                                         selectedDate.toString();
-                                    int lamaCuti =
+                                    lamaCuti =
                                         int.parse(lamaCutiController.text);
                                     print('Tanggal Cuti: $tanggalCuti');
                                     print('Lama Cuti: $lamaCuti jam');
+                                  }
+
+                                  var res = await addCuti(selectedDate, lamaCutiController.text, username["id"]);
+                                  if (res['error']) {
+
+                                  } else {
+                                      var snackBar = SnackBar(content: Text("Data tidak berhasil ditambahkan!"));
+                                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
                                   }
                                 },
                                 child: Text(
@@ -284,6 +330,8 @@ class _CutiState extends State<Cuti> {
                   ),
                 ))
           ],
-        )));
+        ))
+    );
+
   }
 }

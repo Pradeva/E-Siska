@@ -2,14 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:tubesabp/cuti.dart';
 import 'package:tubesabp/lembur.dart';
 import 'package:tubesabp/listkaryawan.dart';
-
+import 'package:tubesabp/beranda.dart';
 import 'absen.dart';
 
 class GridDashboard extends StatelessWidget {
+  GridDashboard({required this.username});
   Items item1 = new Items(title: "Lembur", img: "assets/overtime.png");
   Items item2 = new Items(title: "Cuti", img: "assets/schedule.png");
   Items item3 = new Items(title: "Absen", img: "assets/machine.png");
   Items item4 = new Items(title: "List Karyawan", img: "assets/shortlist.png");
+  Map<String, dynamic> username;
 
   @override
   Widget build(BuildContext context) {
@@ -30,16 +32,16 @@ class GridDashboard extends StatelessWidget {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => const LemburForm()));
+                        builder: (context) => LemburForm(username: username,)));
               } else if (data.title == "Cuti") {
                 Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => const CutiForm()));
+                    MaterialPageRoute(builder: (context) => CutiForm(username: username,)));
               } else if (data.title == "Absen") {
                 Navigator.push(
-                    context, MaterialPageRoute(builder: (context) => Absen()));
+                    context, MaterialPageRoute(builder: (context) => Absen(username: username,)));
               } else {
                 Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => const ListApp()));
+                    MaterialPageRoute(builder: (context) => ListApp()));
               }
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(

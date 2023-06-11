@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'login.dart';
 
 void main() {
-  runApp(const Absen());
+  runApp( Absen(username: username,));
 }
 
 class Absen extends StatelessWidget {
-  const Absen({super.key});
+  const Absen({required this.username});
+  final Map<String, dynamic> username;
   @override
   Widget build(BuildContext context) {
     return MaterialApp(

@@ -1,16 +1,16 @@
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:tubesabp/Karyawan_Data.dart';
-
 import 'package:flutter/material.dart';
+import 'login.dart';
 
 void main() {
-  runApp(const LemburForm());
+  runApp(LemburForm(username: username,));
 }
 
 Future<List<Karyawan_Data>> fetchKaryawan() async {
   final res =
-      await http.get(Uri.parse('http://192.168.43.118:8000/api/karyawan'));
+      await http.get(Uri.parse('http://192.168.43.22:8000/api/karyawan'));
   if (res.statusCode == 200) {
     var data = jsonDecode(res.body);
     var parsed = data['list'].cast<Map<String, dynamic>>();
@@ -33,7 +33,8 @@ String getStatusText(int status) {
 }
 
 class LemburForm extends StatelessWidget {
-  const LemburForm({super.key});
+  const LemburForm({required this.username});
+  final Map<String, dynamic> username;
 
   // This widget is the root of your application.
   @override
@@ -160,28 +161,38 @@ class _LemburState extends State<Lembur> {
                                   } else if (snapshot.hasError) {
                                     return Text('Error: ${snapshot.error}');
                                   } else {
-                                    final nama = snapshot.data![0].name;
-                                    final lembur = snapshot.data![0].lembur;
-
-                                    return ListView.builder(
-                                      itemCount: lembur.length,
-                                      itemBuilder: (context, index) {
-                                        return Container(
-                                          width: 100,
-                                          height: 50,
-                                          decoration: BoxDecoration(
-                                              color: Color(0xff97bce8),
-                                              borderRadius:
-                                                  BorderRadius.circular(10)),
-                                          child: Text(
-                                            'Lama Lembur: ${lembur[index]["lama_lembur"]} hari\n'
-                                            'Tanggal Lembur: ${lembur[index]["tanggal_lembur"]}\n'
-                                            'Status: ${getStatusText(lembur[index]["disetujui"])}',
-                                            textAlign: TextAlign.center,
-                                          ),
-                                        );
-                                      },
-                                    );
+                                    var i = 0;
+                                    var lembur;
+                                    while (i < snapshot.data!.length){
+                                      if (snapshot.data![i].id == username['id']){
+                                        lembur = snapshot.data![i].lembur;
+                                      }
+                                      i++;
+                                    }
+                                    if (lembur != null){
+                                      return ListView.builder(
+                                        itemCount: lembur.length,
+                                        itemBuilder: (context, index) {
+                                          return Container(
+                                            width: 100,
+                                            height: 50,
+                                            decoration: BoxDecoration(
+                                                color: Color(0xff97bce8),
+                                                borderRadius:
+                                                BorderRadius.circular(10)),
+                                            child: Text(
+                                              'Lama Lembur: ${lembur[index]["lama_lembur"]} hari\n'
+                                                  'Tanggal Lembur: ${lembur[index]["tanggal_lembur"]}\n'
+                                                  'Status: ${getStatusText(lembur[index]["disetujui"])}',
+                                              textAlign: TextAlign.center,
+                                            ),
+                                          );
+                                        },
+                                      );
+                                    } else {
+                                      return Text("Belum Ada Lembur",
+                                          textAlign: TextAlign.center);
+                                    }
                                   }
                                 },
                               ),

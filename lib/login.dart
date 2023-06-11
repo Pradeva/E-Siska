@@ -11,7 +11,7 @@ void main() {
   runApp(const MyApp());
 }
 
-String username = '';
+Map<String, dynamic> username = {};
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -70,7 +70,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Future<List> _login() async {
     final response = await http
-        .post(Uri.parse('http://192.168.43.118:8000/api/login'), body: {
+        .post(Uri.parse('http://192.168.43.22:8000/api/login'), body: {
       "email": user.text,
       "password": pass.text,
     });
@@ -85,7 +85,7 @@ class _MyHomePageState extends State<MyHomePage> {
     }
 
     setState(() {
-      username = datauser['success']['user']['name'];
+      username = datauser["user"];
     });
 
     print(username);

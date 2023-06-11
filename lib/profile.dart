@@ -2,12 +2,25 @@ import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:flutter/cupertino.dart';
 
+import 'login.dart';
+
 void main() {
-  runApp(const Profile());
+  runApp(Profile(username: username,));
+}
+
+String getStatusText(int status) {
+  if (status == 1) {
+    return 'Admin';
+  } else if (status == 2) {
+    return 'HRD';
+  } else {
+    return 'Karyawan'; // return an empty string for other status values if needed
+  }
 }
 
 class Profile extends StatelessWidget {
-  const Profile({super.key});
+  const Profile({required this.username});
+  final Map<String, dynamic> username;
 
   // This widget is the root of your application.
   @override
@@ -65,7 +78,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   Container(
                     height: 48,
                     width: 137,
-                    child: Text("Pradeva",
+                    child: Text(username['name'],
                         style: TextStyle(
                             fontSize: 32,
                             fontWeight: FontWeight.w600,
@@ -100,7 +113,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   borderRadius: BorderRadius.circular(20)),
               margin: EdgeInsets.only(top: 28),
               child: Container(
-                child: Text("Rp. 2.000.000,-",
+                child: Text('Rp. ${username["gaji_total"]}',
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 22,
@@ -137,7 +150,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           margin: EdgeInsets.only(left: 50),
                         ),
                         Container(
-                          child: Text("Pradeva Fairuz Zabbar",
+                          child: Text(username["name"],
                               style: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.w500,
@@ -162,7 +175,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           margin: EdgeInsets.only(left: 50),
                         ),
                         Container(
-                          child: Text("pradevafairuz@gmail.com",
+                          child: Text(username["email"],
                               style: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.w500,
@@ -187,7 +200,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           margin: EdgeInsets.only(left: 50),
                         ),
                         Container(
-                          child: Text("081381218850",
+                          child: Text(username["telp"].toString(),
                               style: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.w500,
@@ -216,7 +229,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     margin: EdgeInsets.only(left: 50),
                   ),
                   Container(
-                    child: Text("Karyawan",
+                    child: Text('${getStatusText(username["role"])}',
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w500,

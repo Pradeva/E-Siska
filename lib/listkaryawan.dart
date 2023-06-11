@@ -36,7 +36,7 @@ class MyHomePage extends StatefulWidget {
 
 Future<List<user>> fetchUser() async {
   final res =
-      await http.get(Uri.parse('http://192.168.43.118:8000/api/karyawan'));
+      await http.get(Uri.parse('http://192.168.43.22:8000/api/karyawan'));
   if (res.statusCode != 200) {
     print("Data tidak masuk");
     throw Exception('Failed');

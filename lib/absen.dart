@@ -1,5 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:http/http.dart' as http;
+import 'package:tubesabp/Absen_Data.dart';
 import 'login.dart';
 
 void main() {
@@ -28,6 +32,22 @@ class MyHomePage extends StatefulWidget {
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
+}
+
+Future<Map<String, dynamic>> addCuti(_waktuAbsen, _usersId) async {
+  final res = await http.post(
+      Uri.parse('http://10.10.3.20:8000/api/cuti'),
+      body: {
+        "tanggal_cuti" : _waktuAbsen,
+        "users_id" : _usersId
+
+      }
+  );
+  if (res.statusCode == 200) {
+    return jsonDecode(res.body);
+  }else{
+    throw Exception('Failed');
+  }
 }
 
 class _MyHomePageState extends State<MyHomePage> {
@@ -139,7 +159,21 @@ class _MyHomePageState extends State<MyHomePage> {
                             ),
                             Container(
                               child: ElevatedButton(
-                                onPressed: () {},
+                                onPressed: () async {
+                                  var waktuAbsen;
+                                  if (currentTime != null) {
+                                    waktuAbsen = currentTime;
+                                    print('Waktu Absen: $waktuAbsen');
+                                  }
+
+                                  var res = await addCuti(waktuAbsen, username["id"]);
+                                  if (res['error']) {
+
+                                  } else {
+                                    var snackBar = SnackBar(content: Text("Data tidak berhasil ditambahkan!"));
+                                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                                  }
+                                },
                                 child: Text(
                                   "Absen",
                                   style: TextStyle(

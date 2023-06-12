@@ -1,19 +1,19 @@
 class Lembur_Data {
-  final int id;
-  final int lama_lembur;
-  final int disetujui;
+  final String users_id;
+  final String lama_lembur;
+  final String tanggal_lembur;
 
   const Lembur_Data({
-    required this.id,
+    required this.users_id,
     required this.lama_lembur,
-    required this.disetujui,
+    required this.tanggal_lembur,
   });
 
   factory Lembur_Data.fromJson(Map<String, dynamic> json) {
     return Lembur_Data(
-      id: json['id'],
+      users_id: json['users_id'],
       lama_lembur: json['lama_lembur'],
-      disetujui: json['disetujui'],
+      tanggal_lembur: json['tanggal_lembur'],
     );
   }
 }

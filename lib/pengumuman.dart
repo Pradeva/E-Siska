@@ -146,24 +146,24 @@ class _MyHomePageState extends State<MyHomePage> {
                                         Container(
                                           child: Text(snapshot.data![index].judul,style: TextStyle(
                                               fontSize: 16,
-                                              fontWeight: FontWeight.w500,
+                                              fontWeight: FontWeight.w700,
                                               color: Color.fromRGBO(79, 79, 79, 1),
                                               fontFamily: "Quicksand"
                                           )),
                                           margin: EdgeInsets.only(
-                                              right: 170,
                                               top: 20
                                           ),
                                         ),
                                         Container(
                                           child: Text(snapshot.data![index].pesan,style: TextStyle(
-                                              fontSize: 20,
-                                              fontWeight: FontWeight.w500,
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.w400,
                                               color: Color.fromRGBO(0, 0, 0, 1),
                                               fontFamily: "Quicksand"
                                           )),
                                           margin: EdgeInsets.only(
-                                              right: 135,
+                                            left: 10,
+                                              right: 10,
                                               top: 17
                                           ),
                                         ),

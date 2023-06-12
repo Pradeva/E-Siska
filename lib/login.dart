@@ -59,6 +59,8 @@ class MyHomePage extends StatefulWidget {
 
   final String title;
 
+
+
   @override
   State<MyHomePage> createState() => _MyHomePageState();
 }
@@ -185,10 +187,26 @@ class _MyHomePageState extends State<MyHomePage> {
                 },
               ),
             ),
-            Text(
-              msg,
-              style: TextStyle(fontSize: 30, color: Colors.red),
-            )
+            
+            SizedBox(height: 16.0),
+            Container(
+                width: 250,
+                height: 50,
+                decoration: BoxDecoration(
+                  color: Colors.white60,
+                  borderRadius: BorderRadius.circular(30),
+                ),
+                padding: EdgeInsets.symmetric(
+                    horizontal: 5.0, vertical: 15.0),
+              child : Text(
+                msg,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+
+                    fontSize: 20, color: Colors.red, fontWeight: FontWeight.w700),
+              )
+            ),
+
           ],
         ),
       ),

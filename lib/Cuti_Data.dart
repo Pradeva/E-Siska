@@ -1,19 +1,19 @@
 class Cuti_Data {
-  final int id;
-  final int lama_cuti;
-  final int disetujui;
+  final String users_id;
+  final String lama_cuti;
+  final String tanggal_cuti;
 
   const Cuti_Data({
-    required this.id,
+    required this.users_id,
     required this.lama_cuti,
-    required this.disetujui,
+    required this.tanggal_cuti,
   });
 
   factory Cuti_Data.fromJson(Map<String, dynamic> json) {
     return Cuti_Data(
-      id: json['id'],
+      users_id: json['users_id'],
       lama_cuti: json['lama_cuti'],
-      disetujui: json['disetujui'],
+      tanggal_cuti: json['tanggal_cuti'],
     );
   }
 }

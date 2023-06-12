@@ -1,5 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:http/http.dart' as http;
+import 'Absen_Data.dart';
 import 'login.dart';
 
 void main() {
@@ -30,8 +34,43 @@ class MyHomePage extends StatefulWidget {
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
+Future<Map<String, dynamic>> addAbsen(_waktuAbsen, _usersId) async {
+  final res = await http.post(
+      Uri.parse('http://192.168.43.22:8000/api/absen'),
+      body: {
+        "waktu_absen" : _waktuAbsen,
+        "users_id" : _usersId
+
+      }
+  );
+  if (res.statusCode == 200) {
+    return jsonDecode(res.body);
+  }else{
+    throw Exception('Failed');
+  }
+}
+
+
+
 class _MyHomePageState extends State<MyHomePage> {
-  dynamic currentTime = DateFormat.jm().format(DateTime.now());
+  DateFormat _dateTimeFormat = DateFormat('HH:mm:ss');
+  String _currentDateTime = '';
+
+  @override
+  void initState() {
+    super.initState();
+    _updateDateTime();
+  }
+
+
+  void _updateDateTime() {
+    setState(() {
+      _currentDateTime = _dateTimeFormat.format(DateTime.now());
+    });
+
+    // Schedule the next update after 1 second
+    Future.delayed(Duration(seconds: 1), _updateDateTime);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -121,13 +160,15 @@ class _MyHomePageState extends State<MyHomePage> {
                                         ),
                                         color: Color(0XFFAE2025),
                                       ),
+                                      padding: EdgeInsets.symmetric(
+                                          horizontal: 5.0, vertical: 10.0),
                                       child: Text(
-                                        currentTime,
+                                        _currentDateTime,
                                         textAlign: TextAlign.center,
                                         style: TextStyle(
                                             color: Colors.white,
                                             fontFamily: "Poppins",
-                                            fontSize: 70),
+                                            fontSize: 50),
                                       ),
                                     ),
                                   ),
@@ -139,9 +180,24 @@ class _MyHomePageState extends State<MyHomePage> {
                             ),
                             Container(
                               child: ElevatedButton(
-                                onPressed: () {},
+                                onPressed: () async {
+                                  var waktuAbsen;
+                                  if (_currentDateTime != null) {
+                                    waktuAbsen = _currentDateTime;
+                                    print('Waktu Absen: $waktuAbsen');
+                                  }
+
+                                  var res = await addAbsen(waktuAbsen.toString(), username["id"].toString());
+                                  if (res['error']) {
+                                    var snackBar = SnackBar(content: Text("Data tidak berhasil ditambahkan!"));
+                                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                                  } else {
+                                    var snackBar = SnackBar(content: Text("Data berhasil ditambahkan!"));
+                                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                                  }
+                                },
                                 child: Text(
-                                  "Absen",
+                                  "ABSEN",
                                   style: TextStyle(
                                       fontFamily: "Poppins", fontSize: 16),
                                 ),

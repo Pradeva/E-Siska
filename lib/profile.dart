@@ -62,29 +62,36 @@ class _MyHomePageState extends State<MyHomePage> {
                           fontFamily: 'Poppins',
                         )),
                     margin: EdgeInsets.only(top: 30),
-                    width: 52,
+                    width: 60,
                     height: 30,
                   ),
                   Container(
                     height: 100,
                     width: 100,
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                        image: AssetImage('assets/user.png'),
+                    child: Align(
+                      alignment: Alignment.center,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                            image: AssetImage('assets/user.png'),
+                          ),
+                        ),
                       ),
                     ),
+
                     margin: EdgeInsets.only(top: 30),
                   ),
                   Container(
                     height: 48,
                     width: 137,
                     child: Text(username['name'],
+                        textAlign: TextAlign.center,
                         style: TextStyle(
                             fontSize: 32,
                             fontWeight: FontWeight.w600,
                             color: Colors.white,
                             fontFamily: 'Poppins')),
-                    margin: EdgeInsets.only(top: 18, left: 20),
+                    margin: EdgeInsets.only(top: 18),
                   ),
                 ],
               ),
@@ -114,6 +121,7 @@ class _MyHomePageState extends State<MyHomePage> {
               margin: EdgeInsets.only(top: 28),
               child: Container(
                 child: Text('Rp. ${username["gaji_total"]}',
+                    textAlign: TextAlign.center,
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 22,
@@ -141,6 +149,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     child: Row(
                       children: [
                         Container(
+                          width : 50,
                           child: Text("Nama",
                               style: TextStyle(
                                   fontSize: 16,
@@ -151,12 +160,13 @@ class _MyHomePageState extends State<MyHomePage> {
                         ),
                         Container(
                           child: Text(username["name"],
+                              textAlign: TextAlign.right,
                               style: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.w500,
                                 fontFamily: 'Poppins',
                               )),
-                          margin: EdgeInsets.only(left: 104),
+                          margin: EdgeInsets.only(left: 83),
                         ),
                       ],
                     ),
@@ -166,6 +176,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     child: Row(
                       children: [
                         Container(
+                          width : 50,
                           child: Text("Email",
                               style: TextStyle(
                                   fontSize: 16,
@@ -176,6 +187,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         ),
                         Container(
                           child: Text(username["email"],
+                              textAlign: TextAlign.right,
                               style: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.w500,
@@ -191,6 +203,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     child: Row(
                       children: [
                         Container(
+                          width : 50,
                           child: Text("HP",
                               style: TextStyle(
                                   fontSize: 16,
@@ -201,12 +214,13 @@ class _MyHomePageState extends State<MyHomePage> {
                         ),
                         Container(
                           child: Text(username["telp"].toString(),
+                              textAlign: TextAlign.right,
                               style: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.w500,
                                 fontFamily: 'Poppins',
                               )),
-                          margin: EdgeInsets.only(left: 180),
+                          margin: EdgeInsets.only(left: 83),
                         ),
                       ],
                     ),
@@ -220,6 +234,7 @@ class _MyHomePageState extends State<MyHomePage> {
               child: Row(
                 children: [
                   Container(
+                    width : 50,
                     child: Text("Role",
                         style: TextStyle(
                             fontSize: 16,
@@ -230,48 +245,19 @@ class _MyHomePageState extends State<MyHomePage> {
                   ),
                   Container(
                     child: Text('${getStatusText(username["role"])}',
+                        textAlign: TextAlign.right,
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w500,
                           fontFamily: 'Poppins',
                         )),
-                    margin: EdgeInsets.only(left: 207),
+                    margin: EdgeInsets.only(left: 83),
                   ),
                 ],
               ),
               margin: EdgeInsets.only(top: 18),
             ),
-            Container(
-              width: 128,
-              height: 37,
-              child: Container(
-                child: Text("LOG OUT",
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontFamily: "Poppins",
-                        fontSize: 18,
-                        fontWeight: FontWeight.w800)),
-                margin: EdgeInsets.only(
-                  top: 5,
-                  bottom: 5,
-                  left: 25,
-                  right: 25,
-                ),
-              ),
-              decoration: BoxDecoration(
-                  color: Color.fromRGBO(174, 32, 37, 1),
-                  borderRadius: BorderRadius.circular(20),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.5),
-                      spreadRadius: 2,
-                      blurRadius: 5,
-                      offset:
-                          Offset(0, 3), // changes the position of the shadow
-                    ),
-                  ]),
-              margin: EdgeInsets.only(top: 40),
-            ),
+
           ],
         ),
       ),

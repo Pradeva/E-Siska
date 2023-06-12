@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:tubesabp/Karyawan_Data.dart';
 import 'package:tubesabp/login.dart';
 import 'package:tubesabp/Cuti_Data.dart';
+import 'package:intl/intl.dart';
 
 void main() {
   runApp( CutiForm(username: username,));
@@ -66,29 +67,35 @@ Future<Map<String, dynamic>> addCuti(_tanggalCuti, _lamaCuti, _usersId) async {
 }
 
 String getStatusText(int status) {
-  if (status == 0) {
-    return 'Belum di proses';
+  if (status == 1) {
+    return 'Disetujui';
   } else if (status == 2) {
     return 'Ditolak';
   } else {
-    return 'Disetujui'; // return an empty string for other status values if needed
+    return 'Belum di proses'; // return an empty string for other status values if needed
   }
 }
 
 class _CutiState extends State<Cuti> {
   DateTime? selectedDate;
   var lamaCutiController = TextEditingController();
+  late Future<List<Karyawan_Data>> karyawan;
+  @override
+  void initState(){
+    super.initState();
+    karyawan = fetchKaryawan();
+  }
 
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: DateTime.now(),
-      firstDate: DateTime(2020),
-      lastDate: DateTime(2025),
+      firstDate: DateTime(2023),
+      lastDate: DateTime(2030),
     );
     if (picked != null && picked != selectedDate) {
       setState(() {
-        selectedDate = picked;
+        selectedDate = picked.toLocal();
       });
     }
   }
@@ -160,7 +167,7 @@ class _CutiState extends State<Cuti> {
                             SizedBox(height: 16.0),
                             Container(
                               width: 322,
-                              height: 141,
+                              height: 100,
                               decoration: BoxDecoration(
                                   color: Color.fromRGBO(255, 255, 255, 1),
                                   borderRadius: BorderRadius.circular(30)),
@@ -191,12 +198,14 @@ class _CutiState extends State<Cuti> {
                                             child: Column(
                                               children: [
                                                 SizedBox(height: 10,),
-                                                Container(width: 200,
-                                                  height: 50,
+                                                Container(width: 365,
+                                                  height: 60,
                                                   decoration: BoxDecoration(
-                                                      color: Color(0xff97bce8),
+                                                      color: Color(0xFFF4F4F4),
                                                       borderRadius:
                                                       BorderRadius.circular(10)),
+                                                  padding: EdgeInsets.symmetric(
+                                                      horizontal: 2.0, vertical: 5.0),
                                                   child: Text(
                                                     'Lama Cuti: ${cuti[index]["lama_cuti"]} hari\n'
                                                         'Tanggal Cuti: ${cuti[index]["tanggal_cuti"]}\n'
@@ -232,7 +241,7 @@ class _CutiState extends State<Cuti> {
                                 controller: lamaCutiController,
                                 keyboardType: TextInputType.number,
                                 decoration: InputDecoration(
-                                  labelText: '    Lama Cuti (dalam jam)',
+                                  labelText: '    Lama Cuti (dalam hari)',
                                   labelStyle: TextStyle(
                                       fontFamily: "Poppins", fontSize: 14.0),
                                   border: InputBorder.none,
@@ -273,7 +282,7 @@ class _CutiState extends State<Cuti> {
                                   child: Text(
                                     selectedDate == null
                                         ? 'Pilih Tanggal Cuti'
-                                        : 'Tanggal Cuti: ${selectedDate.toString()}',
+                                        : 'Tanggal Cuti: ${DateFormat('dd-MM-yyyy').format(selectedDate).toString()}',
                                     style: TextStyle(
                                       fontFamily: "Poppins",
                                       fontSize: 14.0,
@@ -284,26 +293,21 @@ class _CutiState extends State<Cuti> {
                             ),
                             SizedBox(height: 20.0),
                             Container(
+
                               child: ElevatedButton(
                                 onPressed: () async {
-                                  var tanggalCuti;
-                                  var lamaCuti;
-                                  if (selectedDate != null &&
-                                      lamaCutiController.text.isNotEmpty) {
-                                    tanggalCuti =
-                                        selectedDate.toString();
-                                    lamaCuti =
-                                        int.parse(lamaCutiController.text);
-                                    print('Tanggal Cuti: $tanggalCuti');
-                                    print('Lama Cuti: $lamaCuti jam');
-                                  }
 
-                                  var res = await addCuti(selectedDate, lamaCutiController.text, username["id"]);
+                                  var res = await addCuti(selectedDate.toString().substring(0,10), lamaCutiController.text.toString(), username["id"].toString());
+
                                   if (res['error']) {
-
+                                    var snackBar = SnackBar(content: Text("Data tidak ditambahkan!"));
+                                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
                                   } else {
-                                      var snackBar = SnackBar(content: Text("Data tidak berhasil ditambahkan!"));
-                                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                                    var snackBar = SnackBar(content: Text("Data berhasil ditambahkan!"));
+                                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                                    setState(() {
+                                      karyawan = fetchKaryawan();
+                                    });
                                   }
                                 },
                                 child: Text(
